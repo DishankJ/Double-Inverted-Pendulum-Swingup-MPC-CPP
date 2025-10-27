@@ -1,15 +1,16 @@
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <mpc/NLMPC.hpp>
 
 constexpr int num_states = 6;
 constexpr int num_output = 6;
 constexpr int num_inputs = 1;
-constexpr int pred_hor = 50;
+constexpr int pred_hor = 30;
 constexpr int ctrl_hor = pred_hor;
 constexpr int ineq_c = (pred_hor + 1) * (2*num_states + 2);
 constexpr int eq_c = 0;
-double ts = 0.02;
+double ts = 0.03;
 
 double m0 = 0.6;
 double m1 = 0.2;
@@ -59,14 +60,14 @@ int main()
     Eigen::DiagonalMatrix<double, num_states> Q;
     Q.diagonal() << 0.5, 2.0, 2.0, 0.01, 0.01, 0.01;
     Eigen::DiagonalMatrix<double, num_states> Qf;
-    Qf.diagonal() << 80.0, 5.0, 10.0, 0.5, 1.0, 1.0;
+    Qf.diagonal() << 60.0, 5.0, 10.0, 0.5, 1.0, 1.0;
     double R = 0.1;
     double weight_stage_energy = 1;
     double weight_terminal_energy = 30;
 
     mpc::cvec<num_states> xmin, xmax;
-    xmax << 6, mpc::inf, mpc::inf, 30, 30, 30;
-    xmin << -6, -mpc::inf, -mpc::inf, -30, -30, -30;
+    xmax << 6, 10, 10, 30, 30, 30;
+    xmin << -6, -10, -10, -30, -30, -30;
 
     double umax = 20;
     double umin = -umax;
@@ -81,11 +82,11 @@ int main()
     controller.setDiscretizationSamplingTime(ts);
 
     mpc::NLParameters params;
-    params.maximum_iteration = 100;
+    params.maximum_iteration = 3;
     params.relative_ftol = -1;
     params.relative_xtol = -1;
     params.hard_constraints = false;
-    params.enable_warm_start = false;
+    params.enable_warm_start = true;
 
     controller.setOptimizerParameters(params);
 
@@ -102,20 +103,20 @@ int main()
                      const mpc::mat<pred_hor + 1, num_inputs> &u,
                      const double &e)
     {
-        // double cost = 0;
-        // for (int i = 0; i < pred_hor; i++)
-        // {
-        //     // cost += x.row(i) * x.row(i).transpose();
-        //     // cost += u.row(i) * u.row(i).transpose();
-        //     cost += weight_stage_energy * getEnergyCost(x.row(i));
-        // }
-        // // cost += x.row(pred_hor) * x.row(pred_hor).transpose();
-        // // cost += u.row(pred_hor) * u.row(pred_hor).transpose();
-        // cost += weight_terminal_energy * getEnergyCost(x.row(pred_hor));
+        double cost = 0;
+        for (int i = 0; i < pred_hor; i++)
+        {
+            cost += x.row(i) * Q * x.row(i).transpose();
+            cost += u.row(i) * R * u.row(i).transpose();
+            cost += weight_stage_energy * getEnergyCost(x.row(i));
+        }
+        cost += x.row(pred_hor) * Qf * x.row(pred_hor).transpose();
+        cost += u.row(pred_hor) * R * u.row(pred_hor).transpose();
+        cost += weight_terminal_energy * getEnergyCost(x.row(pred_hor));
         
-        // return cost;
+        return cost;
 
-        return x.array().square().sum() + u.array().square().sum();
+        // return x.array().square().sum() + u.array().square().sum();
     };
     controller.setObjectiveFunction(objEq);
 
@@ -144,8 +145,8 @@ int main()
     modeldX.resize(num_states);
 
     modelX(0) = 0;
-    modelX(1) = 0;
-    modelX(2) = 0.03;
+    modelX(1) = 0.99*3.14;
+    modelX(2) = 0.99*3.14;
     modelX(3) = 0;
     modelX(4) = 0;
     modelX(5) = 0;
@@ -153,18 +154,23 @@ int main()
     auto r = controller.getLastResult();
     // r.cmd.setZero();
     
+    std::ofstream myfile;
+    myfile.open("try4.csv");
     double t = 0;
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 200; i++)
     {
         r = controller.optimize(modelX, r.cmd);
         doubleInvPendulumDynamics(modeldX, modelX, r.cmd);
         modelX += ts * modeldX;
         t += ts;
 
+        myfile << t << "," << modelX(0) << "," << modelX(1) << "," << modelX(2) << "," << modelX(3) << "," << modelX(4) << "," << modelX(5) << "\n";
+
         std::cout << t << " : time" << ", " << modelX(0) << ", " << modelX(1) << ", " << modelX(2) << ", " << modelX(3) << ", " << modelX(4) << ", " << modelX(5);
         std::cout << std::endl;
         std::cout << "control input is " << r.cmd.transpose() << std::endl;
     }
+    myfile.close();
 
     std::cout << controller.getExecutionStats();
 
