@@ -35,11 +35,6 @@ void doubleInvPendulumDynamics(mpc::cvec<num_states> &dx, const mpc::cvec<num_st
     dx(0) = x(3);
     dx(1) = x(4);
     dx(2) = x(5);
-
-    // dx(3) = (900.0*pow(cos(x(1)-x(2)),2)*u(0)-1600.0*u(0)-33.75*(sin(x(1)-2*x(2))+sin(3*x(1)-2*x(2)))*pow(x(4),2)+11.25*(sin(2*x(1)-3*x(2))+sin(2*x(1)-x(2)))*pow(x(5),2)-90.0*sin(x(1)-x(2))*cos(x(1))*pow(x(5),2)+120.0*sin(x(1)-x(2))*cos(x(2))*pow(x(4),2)+135.0*sin(x(1))*pow(cos(x(1)-x(2)),2)*pow(x(4),2)-2646.0*sin(x(1))*cos(x(1)-x(2))*cos(x(2))-240.0*sin(x(1))*pow(x(4),2)+2646.0*sin(2*x(1))+45.0*sin(x(2))*pow(cos(x(1)-x(2)),2)*pow(x(5),2)-2646.0*sin(x(2))*cos(x(1)-x(2))*cos(x(1))-80.0*sin(x(2))*pow(x(5),2)+1176.0*sin(2*x(2)))/(315.0*cos(2*x(1)-2*x(2))+135.0*cos(2*x(1))-15.0*cos(2*x(2))-895.0);
-    // dx(4) = (-450.0*u(0)*cos(x(1)-2*x(2))+1350.0*u(0)*cos(x(1))-3087.0*sin(x(1)-2*x(2))+232.5*sin(x(1)-x(2))*pow(x(5),2)+22.5*sin(x(1)+x(2))*pow(x(5),2)+157.5*sin(2*x(1)-2*x(2))*pow(x(4),2)-11907.0*sin(x(1))+67.5*sin(2*x(1))*pow(x(4),2))/(157.5*cos(2*x(1)-2*x(2))+67.5*cos(2*x(1))-7.5*cos(2*x(2))-447.5);
-    // dx(5) = (-2.14285714285714*u(0)*cos(2*x(1)-x(2))+1.66666666666667*u(0)*cos(x(2))-1.29761904761905*sin(x(1)-x(2))*pow(x(4),2)-0.035714285714286*sin(x(1)+x(2))*pow(x(4),2)-0.25*sin(2*x(1)-2*x(2))*pow(x(5),2)+14.7*sin(2*x(1)-x(2))-10.0333333333333*sin(x(2))-0.0119047619047619*sin(2*x(2))*pow(x(5),2))/(0.25*cos(2*x(1)-2*x(2))+0.107142857142857*cos(2*x(1))-0.0119047619047619*cos(2*x(2))-0.71031746031746);
-
     dx(3) = (B*B*F*g*sin(2*x(1))/2 - B*C*E*g*sin(x(1))*cos(x(1) - x(2))*cos(x(2)) - B*C*E*g*sin(x(2))*cos(x(1) - x(2))*cos(x(1)) - B*D*F*sin(x(1))*x(4)*x(4) - B*E*E*(sin(x(1) - 2*x(2)) + sin(3*x(1) - 2*x(2)))*x(4)*x(4)/4 + B*E*E*sin(x(1))*cos(x(1) - x(2))*cos(x(1) - x(2))*x(4)*x(4) - B*E*F*sin(x(1) - x(2))*cos(x(1))*x(5)*x(5) + C*C*D*g*sin(2*x(2))/2 + C*D*E*sin(x(1) - x(2))*cos(x(2))*x(4)*x(4) - C*D*F*sin(x(2))*x(5)*x(5) + C*E*E*(sin(2*x(1) - 3*x(2)) + sin(2*x(1) - x(2)))*x(5)*x(5)/4 + C*E*E*sin(x(2))*cos(x(1) - x(2))*cos(x(1) - x(2))*x(5)*x(5) - D*F*u(0) + E*E*u(0)*cos(x(1) - x(2))*cos(x(1) - x(2))) / (-A*D*F + A*E*E*cos(x(1) - x(2))*cos(x(1) - x(2)) + B*B*F*cos(x(1))*cos(x(1)) - 2*B*C*E*cos(x(1) - x(2))*cos(x(1))*cos(x(2)) + C*C*D*cos(x(2))*cos(x(2)));
     dx(4) = (2*A*B*F*g*sin(x(1)) + A*C*E*g*sin(x(1) - 2*x(2)) - A*C*E*g*sin(x(1)) - A*E*E*sin(2*x(1) - 2*x(2))*x(4)*x(4) - 2*A*E*F*sin(x(1) - x(2))*x(5)*x(5) - B*B*F*sin(2*x(1))*x(4)*x(4) - B*C*C*g*sin(x(1) - 2*x(2)) - B*C*C*g*sin(x(1)) + B*C*E*sin(2*x(1) - 2*x(2))*x(4)*x(4) + B*C*E*sin(2*x(1))*x(4)*x(4) + B*C*F*sin(x(1) - x(2))*x(5)*x(5) - B*C*F*sin(x(1) + x(2))*x(5)*x(5) - 2*B*F*u(0)*cos(x(1)) + C*C*E*sin(x(1) - x(2))*x(5)*x(5) + C*C*E*sin(x(1) + x(2))*x(5)*x(5) + C*E*u(0)*cos(x(1) - 2*x(2)) + C*E*u(0)*cos(x(1))) / (2*(A*D*F - A*E*E*cos(x(1) - x(2))*cos(x(1) - x(2)) - B*B*F*cos(x(1))*cos(x(1)) + 2*B*C*E*cos(x(1) - x(2))*cos(x(1))*cos(x(2)) - C*C*D*cos(x(2))*cos(x(2))));
     dx(5) = (-A*B*E*g*sin(2*x(1) - x(2)) - A*B*E*g*sin(x(2)) + 2*A*C*D*g*sin(x(2)) + 2*A*D*E*sin(x(1) - x(2))*x(4)*x(4) + A*E*E*sin(2*x(1) - 2*x(2))*x(5)*x(5) + B*B*C*g*sin(2*x(1) - x(2)) - B*B*C*g*sin(x(2)) - B*B*E*sin(x(1) - x(2))*x(4)*x(4) + B*B*E*sin(x(1) + x(2))*x(4)*x(4) - B*C*D*sin(x(1) - x(2))*x(4)*x(4) - B*C*D*sin(x(1) + x(2))*x(4)*x(4) - B*C*E*sin(2*x(1) - 2*x(2))*x(5)*x(5) + B*C*E*sin(2*x(2))*x(5)*x(5) + B*E*u(0)*cos(2*x(1) - x(2)) + B*E*u(0)*cos(x(2)) - C*C*D*sin(2*x(2))*x(5)*x(5) - 2*C*D*u(0)*cos(x(2))) / (2*(A*D*F - A*E*E*cos(x(1) - x(2))*cos(x(1) - x(2)) - B*B*F*cos(x(1))*cos(x(1)) + 2*B*C*E*cos(x(1) - x(2))*cos(x(1))*cos(x(2)) - C*C*D*cos(x(2))*cos(x(2))));
@@ -115,8 +110,6 @@ int main()
         cost += weight_terminal_energy * getEnergyCost(x.row(pred_hor));
         
         return cost;
-
-        // return x.array().square().sum() + u.array().square().sum();
     };
     controller.setObjectiveFunction(objEq);
 
