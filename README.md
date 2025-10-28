@@ -16,7 +16,7 @@ sudo make install
 ```
 If any problem is encountered, refer to instructions [here](https://github.com/nicolapiccinelli/libmpc/).
 
-## Build and Run the MPC script:
+## Build and Run the MPC script
 From the repository root:
 ```sh
 mkdir build
@@ -25,3 +25,8 @@ cmake ..
 make
 bin/double_inv_pend
 ```
+
+### Plots and Animation
+![State Trajectories Plot](https://github.com/DishankJ/Double-Inverted-Pendulum-Swingup-MPC-CPP/blob/main/state_traj.png?raw=true)
+
+![Animation](https://github.com/DishankJ/Double-Inverted-Pendulum-Swingup-MPC-CPP/blob/main/dip_anim.gif?raw=true)
