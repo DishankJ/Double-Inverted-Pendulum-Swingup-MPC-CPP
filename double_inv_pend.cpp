@@ -148,7 +148,7 @@ int main()
     // r.cmd.setZero();
     
     std::ofstream myfile;
-    myfile.open("try4.csv");
+    myfile.open("state_trajectory.csv");
     double t = 0;
     for(int i = 0; i < 200; i++)
     {
