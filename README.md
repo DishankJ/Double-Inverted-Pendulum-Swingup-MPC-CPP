@@ -27,6 +27,8 @@ bin/double_inv_pend
 ```
 
 ### Plots and Animation
+`plotter.py` can be used to create plot and animation after you have run the MPC script(which saves the recorded data to a csv file which in turn is used in Python for easy plotting).
+
 ![State Trajectories Plot](https://github.com/DishankJ/Double-Inverted-Pendulum-Swingup-MPC-CPP/blob/main/state_traj.png?raw=true)
 
 ![Animation](https://github.com/DishankJ/Double-Inverted-Pendulum-Swingup-MPC-CPP/blob/main/dip_anim.gif?raw=true)
