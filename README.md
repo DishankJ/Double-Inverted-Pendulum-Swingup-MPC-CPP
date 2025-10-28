@@ -7,7 +7,7 @@
 From the repository root:
 ```sh
 cd libmpc
-sudo ./configure.sh // to install dependencies if you don't have already
+sudo ./configure.sh # to install dependencies if you don't have already
 mkdir build
 cd build
 cmake ..
