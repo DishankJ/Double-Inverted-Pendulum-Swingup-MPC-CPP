@@ -1,4 +1,5 @@
 # Double-Inverted-Pendulum-Swingup-MPC-CPP
+Python implementation of the same using IPOPT as solver can be found [here](https://github.com/DishankJ/Double-Inverted-Pendulum-Swingup-MPC/).
 
 ## Dependencies
 - libmpc++ and its dependencies (Eigen, NLopt): these can be installed by the instructions below.
